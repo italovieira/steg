@@ -1,12 +1,9 @@
 typedef struct {
-  unsigned char red;
-  unsigned char green;
-  unsigned char blue;
+  unsigned char r, g, b;
 } Pixel;
 
 typedef struct {
-  unsigned int width;
-  unsigned int height;
+  unsigned int x, y;
   unsigned short max;
-  Pixel pixels[1000][1000];
+  Pixel *data;
 } PPM;
