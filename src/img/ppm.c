@@ -10,7 +10,7 @@ void read()
   if (fp == NULL) {
     perror("steg: cannot open 'FILE'");
   } else {
-    PPM *img = (PPM *) malloc(sizeof (PPM));
+    PPM *img = malloc(sizeof (PPM));
 
     // Get format type. E.x.: P6
     char type[3];
