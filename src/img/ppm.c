@@ -21,16 +21,21 @@ void read()
     fscanf(fp, "%u %u %hu", &img->x, &img->y, &img->max);
     printf("%u %u\n%hu\n", img->x, img->y, img->max);
 
-    img->data = malloc(img->x * img->y * sizeof (Pixel));
-
-    fread(img->data, 3, img->x * img->y, fp);
-    if (ferror(fp)) {
-      fprintf(stderr, "steg: error occured while reading file.\n");
+    img->data = malloc(img->x * sizeof (Pixel *));
+    for (unsigned int i = 0; i < img->x; i++) {
+      img->data[i] = malloc(img->y * sizeof (Pixel));
     }
 
-    for (int i = 0; i < 4032; i++) {
-      for (int j = 0; j < 3024; j++) {
-        printf("%d %d %d\n", img->data[i * img->y + j].r, img->data[i * img->y + j].g, img->data[i * img->y + j].b);
+    for (unsigned int i = 0; i < img->x; i++) {
+      fread(img->data[i], sizeof (Pixel), img->y, fp);
+      if (ferror(fp)) {
+        fprintf(stderr, "steg: error occured while reading file.\n");
+      }
+    }
+
+    for (unsigned int i = 0; i < img->x; i++) {
+      for (unsigned int j = 0; j < img->y; j++) {
+        printf("%d %d %d\n", img->data[i][j].r, img->data[i][j].g, img->data[i][j].b);
       }
     }
 

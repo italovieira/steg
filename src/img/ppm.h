@@ -5,5 +5,5 @@ typedef struct {
 typedef struct {
   unsigned int x, y;
   unsigned short max;
-  Pixel *data;
+  Pixel **data;
 } PPM;
