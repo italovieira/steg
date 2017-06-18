@@ -9,6 +9,7 @@ void read()
 
   if (fp == NULL) {
     perror("steg: cannot open 'FILE'");
+    exit(1);
   } else {
     PPM *img = malloc(sizeof (PPM));
 
@@ -32,6 +33,7 @@ void read()
       fread(img->data[i], sizeof (Pixel), img->y, fp);
       if (ferror(fp)) {
         fprintf(stderr, "steg: error occured while reading file.\n");
+        exit(1);
       }
     }
 
