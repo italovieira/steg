@@ -21,11 +21,13 @@ void read()
     fscanf(fp, "%u %u %hu", &img->x, &img->y, &img->max);
     printf("%u %u\n%hu\n", img->x, img->y, img->max);
 
+    // Allocate img data
     img->data = malloc(img->x * sizeof (Pixel *));
     for (unsigned int i = 0; i < img->x; i++) {
       img->data[i] = malloc(img->y * sizeof (Pixel));
     }
 
+    // Get the pixels
     for (unsigned int i = 0; i < img->x; i++) {
       fread(img->data[i], sizeof (Pixel), img->y, fp);
       if (ferror(fp)) {
