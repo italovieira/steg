@@ -37,18 +37,6 @@ void read()
       }
     }
 
-    for (unsigned int i = 0; i < img->x; i++) {
-      for (unsigned int j = 0; j < img->y; j++) {
-        printf("%d %d %d\n", img->data[i][j].r, img->data[i][j].g, img->data[i][j].b);
-      }
-    }
-
     fclose(fp);
-    free(img->data);
   }
-}
-
-int main()
-{
-  read();
 }
