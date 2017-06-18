@@ -2,16 +2,17 @@
 #include <stdlib.h>
 #include "ppm.h"
 
-void read()
+PPM* read()
 {
   // Later use getopt for this
   FILE *fp = fopen("../../.img/imd.ppm", "rb");
+  PPM *img = NULL;
 
   if (fp == NULL) {
     perror("steg: cannot open 'FILE'");
     exit(1);
   } else {
-    PPM *img = malloc(sizeof (PPM));
+    img = malloc(sizeof (PPM));
 
     // Get format type. E.x.: P6
     char type[3];
@@ -38,5 +39,6 @@ void read()
     }
 
     fclose(fp);
+    return img;
   }
 }
