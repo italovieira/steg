@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "ppm.h"
 
 PPM* read()
 {
   // Later use getopt for this
-  FILE *fp = fopen("../../.img/imd.ppm", "rb");
+  FILE *fp = fopen("/home/italo/code/steg/.img/imd.ppm", "rb");
   PPM *img = NULL;
 
   if (fp == NULL) {
