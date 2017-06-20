@@ -1,8 +1,5 @@
 #include <stdbool.h>
-
-typedef struct {
-  unsigned char r, g, b;
-} Pixel;
+#include "pixel.h"
 
 typedef struct {
   unsigned int x, y;
@@ -11,10 +8,6 @@ typedef struct {
 } PPM;
 
 PPM* read();
-
-bool* get_msg_bits(const char *msg, unsigned int msg_len);
-
-void change_bit_lsb(unsigned char *byte, bool bit);
 
 void change_pixels_lsb(PPM *img, unsigned int size_bits, bool bits[]);
 
