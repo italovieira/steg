@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../src/img/ppm.h"
 
-void print_rgb(PPM *img)
+void print_rgb_ppm(PPM *img)
 {
   for (unsigned int i = 0; i < img->x; i++) {
     for (unsigned int j = 0; j < img->x; j++) {
@@ -12,9 +12,9 @@ void print_rgb(PPM *img)
 
 int main()
 {
-  PPM *img = read();
-  //hide_msg(img, "italo");
-  print_rgb(img);
+  PPM *img = read_ppm();
+  //hide_msg_ppm(img, "italo");
+  print_rgb_ppm(img);
 
   return 0;
 }

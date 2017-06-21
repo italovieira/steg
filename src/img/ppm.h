@@ -7,8 +7,8 @@ typedef struct {
   Pixel **data;
 } PPM;
 
-PPM* read();
+PPM* read_ppm();
 
 void change_pixels_lsb(PPM *img, unsigned int size_bits, bool bits[]);
 
-void hide_msg(PPM *img, const char *msg);
+void hide_msg_ppm(PPM *img, const char *msg);

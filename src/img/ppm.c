@@ -3,7 +3,7 @@
 #include <string.h>
 #include "ppm.h"
 
-PPM* read()
+PPM* read_ppm()
 {
   // Later use getopt for this
   FILE *fp = fopen("/home/italo/code/steg/.img/imd.ppm", "rb");
@@ -63,7 +63,7 @@ void change_pixels_lsb(PPM *img, unsigned int size_bits, bool bits[])
   }
 }
 
-void hide_msg(PPM *img, const char *msg)
+void hide_msg_ppm(PPM *img, const char *msg)
 {
   unsigned int msg_len = strlen(msg), size_bits = (msg_len + 1) * 8;
   bool *bits = get_msg_bits(msg, msg_len);
