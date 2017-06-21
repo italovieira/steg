@@ -12,7 +12,7 @@ void print_rgb_ppm(PPM *img)
 
 int main()
 {
-  PPM *img = read_ppm();
+  PPM *img = read_ppm("../.img/imd.ppm");
   //hide_msg_ppm(img, "italo");
   print_rgb_ppm(img);
 

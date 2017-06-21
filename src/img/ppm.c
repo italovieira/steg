@@ -3,10 +3,9 @@
 #include <string.h>
 #include "ppm.h"
 
-PPM* read_ppm()
+PPM* read_ppm(const char *filename)
 {
-  // Later use getopt for this
-  FILE *fp = fopen("/home/italo/code/steg/.img/imd.ppm", "rb");
+  FILE *fp = fopen(filename, "rb");
   PPM *img = NULL;
 
   if (fp == NULL) {
