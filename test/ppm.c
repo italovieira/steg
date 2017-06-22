@@ -10,9 +10,13 @@ void print_rgb_ppm(PPM *img)
   }
 }
 
-int main()
+int main(int argc, char **argv)
 {
-  PPM *img = read_ppm("../.img/imd.ppm");
+  if (argc != 2) {
+    return 1;
+  }
+
+  PPM *img = read_ppm(argv[1]);
   //hide_msg_ppm(img, "italo");
   print_rgb_ppm(img);
 
