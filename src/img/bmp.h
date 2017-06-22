@@ -26,3 +26,5 @@ typedef struct {
 } BMP;
 
 BMP* read_bmp(const char *filename);
+
+void write_bmp(BMP *img, const char *filename);

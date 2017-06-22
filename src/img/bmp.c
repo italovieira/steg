@@ -60,3 +60,35 @@ BMP* read_bmp(const char *filename)
 
   return img;
 }
+
+void write_bmp(BMP *img, const char *filename)
+{
+  FILE *fp = fopen(filename, "wb");
+  if (fp == NULL) {
+    perror("steg: cannot open 'FILE'");
+    exit(EXIT_FAILURE);
+  }
+
+  // Write header
+  if (fwrite(&img->header, 1, sizeof img->header, fp) != sizeof img->header) {
+    fprintf(stderr, "steg: error occured while writing file.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // Write header_info
+  if (fwrite(&img->header_info, 1, sizeof img->header_info, fp) != sizeof img->header_info) {
+    fprintf(stderr, "steg: error occured while writing file.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  // Write the pixels
+  for (unsigned int i = 0; i < img->header_info.y; i++) {
+    unsigned int count = fwrite(img->data[i], sizeof (Pixel), img->header_info.x, fp);
+    if (count != img->header_info.x) {
+      fprintf(stderr, "steg: error occured while writing file.\n");
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  fclose(fp);
+}

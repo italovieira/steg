@@ -17,8 +17,9 @@ int main(int argc, char **argv)
   }
 
   BMP *img = read_bmp(argv[1]);
-  //hide_msg_bmp(img, "italo");
   print_rgb_bmp(img);
+  //hide_msg_bmp(img, "italo");
+  //write_bmp(img, "imd_test.bmp");
 
   return 0;
 }
