@@ -69,3 +69,25 @@ void hide_msg_ppm(PPM *img, const char *msg)
 
   change_pixels_lsb(img, size_bits, bits);
 }
+
+void write_ppm(PPM *img, const char *filename)
+{
+  FILE *fp = fopen(filename, "wb");
+  if (fp == NULL) {
+    perror("steg: cannot open 'FILE'");
+    exit(EXIT_FAILURE);
+  }
+
+  fprintf(fp, "P6\n%u %u\n%hu", img->x, img->y, img->max);
+
+  // Write the pixels
+  for (unsigned int i = 0; i < img->x; i++) {
+    unsigned int count = fwrite(img->data[i], sizeof (Pixel), img->y, fp);
+    if (count != img->y) {
+      fprintf(stderr, "steg: error occured while writing file.\n");
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  fclose(fp);
+}

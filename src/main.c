@@ -41,7 +41,8 @@ int main(int argc, char **argv)
   }
 
   if (!strncmp(fmt, "ppm", 3)) {
-    read_ppm(in);
+    PPM *img = read_ppm(in);
+    write_ppm(img, out);
   } else if (!strncmp(fmt, "bmp", 3)) {
     //read_bmp(in);
   } else {
