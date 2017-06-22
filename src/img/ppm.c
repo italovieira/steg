@@ -24,14 +24,14 @@ PPM* read_ppm(const char *filename)
     printf("%u %u\n%hu\n", img->x, img->y, img->max);
 
     // Allocate img data
-    img->data = malloc(img->x * sizeof (Pixel *));
-    for (unsigned int i = 0; i < img->x; i++) {
-      img->data[i] = malloc(img->y * sizeof (Pixel));
+    img->data = malloc(img->y * sizeof (Pixel *));
+    for (unsigned int i = 0; i < img->y; i++) {
+      img->data[i] = malloc(img->x * sizeof (Pixel));
     }
 
     // Get the pixels
-    for (unsigned int i = 0; i < img->x; i++) {
-      fread(img->data[i], sizeof (Pixel), img->y, fp);
+    for (unsigned int i = 0; i < img->y; i++) {
+      fread(img->data[i], sizeof (Pixel), img->x, fp);
       if (ferror(fp)) {
         fprintf(stderr, "steg: error occured while reading file.\n");
         exit(EXIT_FAILURE);
@@ -47,8 +47,8 @@ void change_pixels_lsb(PPM *img, unsigned int size_bits, bool bits[])
 {
   unsigned int bits_index = 0;
 
-  for (unsigned int i = 0; i < img->x; i++) {
-    for (unsigned int j = 0; j < img->y; j++) {
+  for (unsigned int i = 0; i < img->y; i++) {
+    for (unsigned int j = 0; j < img->x; j++) {
       unsigned char pixels[sizeof (Pixel)];
       memcpy(pixels, &img->data[i][j], sizeof (Pixel));
 
@@ -81,9 +81,9 @@ void write_ppm(PPM *img, const char *filename)
   fprintf(fp, "P6\n%u %u\n%hu", img->x, img->y, img->max);
 
   // Write the pixels
-  for (unsigned int i = 0; i < img->x; i++) {
-    unsigned int count = fwrite(img->data[i], sizeof (Pixel), img->y, fp);
-    if (count != img->y) {
+  for (unsigned int i = 0; i < img->y; i++) {
+    unsigned int count = fwrite(img->data[i], sizeof (Pixel), img->x, fp);
+    if (count != img->x) {
       fprintf(stderr, "steg: error occured while writing file.\n");
       exit(EXIT_FAILURE);
     }
