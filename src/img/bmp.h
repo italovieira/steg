@@ -20,8 +20,8 @@ typedef struct {
 } HeaderInfo;
 
 typedef struct {
-  Header header;
-  HeaderInfo header_info;
+  Header *header;
+  HeaderInfo *header_info;
   Pixel **data;
 } BMP;
 
