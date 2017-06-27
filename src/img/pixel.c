@@ -23,7 +23,7 @@ void change_bit_lsb(unsigned char *byte, bool bit)
   *byte = bit ? *byte | 0x01 : *byte & 0xFE;
 }
 
-void change_pixels_lsb(unsigned int x, unsigned int y, Pixel data[][x], unsigned int size_bits, bool bits[])
+void change_pixels_lsb(unsigned int x, unsigned int y, Pixel **data, unsigned int size_bits, bool bits[])
 {
   unsigned int bits_index = 0;
 
@@ -42,7 +42,7 @@ void change_pixels_lsb(unsigned int x, unsigned int y, Pixel data[][x], unsigned
   }
 }
 
-void hide_msg(unsigned int x, unsigned int y, Pixel data[][x], const char *msg)
+void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
 {
   unsigned int msg_len = strlen(msg), size_bits = (msg_len + 1) * 8;
   bool *bits = get_msg_bits(msg, msg_len);
