@@ -43,33 +43,6 @@ PPM* read_ppm(const char *filename)
   }
 }
 
-void change_pixels_lsb(PPM *img, unsigned int size_bits, bool bits[])
-{
-  unsigned int bits_index = 0;
-
-  for (unsigned int i = 0; i < img->y; i++) {
-    for (unsigned int j = 0; j < img->x; j++) {
-      unsigned char pixels[sizeof (Pixel)];
-      memcpy(pixels, &img->data[i][j], sizeof (Pixel));
-
-      for (unsigned short int k = 0; k < sizeof (Pixel)
-          && bits_index < size_bits; k++, bits_index++) {
-        change_bit_lsb(&pixels[k], bits[bits_index]);
-      }
-
-      memcpy(&img->data[i][j], pixels, sizeof (Pixel));
-    }
-  }
-}
-
-void hide_msg_ppm(PPM *img, const char *msg)
-{
-  unsigned int msg_len = strlen(msg), size_bits = (msg_len + 1) * 8;
-  bool *bits = get_msg_bits(msg, msg_len);
-
-  change_pixels_lsb(img, size_bits, bits);
-}
-
 void write_ppm(PPM *img, const char *filename)
 {
   FILE *fp = fopen(filename, "wb");
