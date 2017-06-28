@@ -49,3 +49,31 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
 
   change_pixels_lsb(x, y, data, size_bits, bits);
 }
+
+const char *get_msg(unsigned int x, unsigned int y, Pixel **data)
+{
+  char *msg = calloc(1000, 1000 * sizeof *msg); // Realloc
+  unsigned int bits_index = 0;
+
+  for (unsigned int i = 0; i < y; i++) {
+    for (unsigned int j = 0; j < x; j++) {
+      unsigned char pixels[sizeof (Pixel)];
+      memcpy(pixels, &data[i][j], sizeof (Pixel));
+
+      for (unsigned short int k = 0; k < sizeof (Pixel); k++, bits_index++) {
+        unsigned char bit_position = bits_index % 8;
+        unsigned int msg_index = bits_index / 8;
+        bool lsb_bit = pixels[k] & 1; // Bit index, 8 by 8
+
+        msg[msg_index] |= lsb_bit << (7 - bit_position);
+
+        // If this is the end of the message, then break out of nested for loops
+        if (bit_position == 7 && msg[msg_index] == '\0') {
+          return msg;
+        }
+      }
+    }
+  }
+
+  return msg;
+}
