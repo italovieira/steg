@@ -27,23 +27,15 @@ int main(int argc, char **argv)
         out = optarg;
         break;
       case '?':
-        if (optopt == 'f' || optopt == 'i' || optopt == 'o') {
-          fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-        } else if (isprint(optopt)) {
-          fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-        } else {
-          fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-        }
-        return 1;
       default:
-        abort();
+        return EXIT_FAILURE;
     }
   }
 
-  if (!strncmp(fmt, "ppm", 3)) {
+  if (strncmp(fmt, "ppm", 3) == 0) {
     PPM *img = read_ppm(in);
     write_ppm(img, out);
-  } else if (!strncmp(fmt, "bmp", 3)) {
+  } else if (!strncmp(fmt, "bmp", 3) == 0) {
     //read_bmp(in);
   } else {
     fprintf(stderr, "Invalid format.\n");
