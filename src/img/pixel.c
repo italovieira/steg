@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "pixel.h"
 
 bool* get_msg_bits(const char *msg, unsigned int msg_len)
@@ -50,9 +51,9 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
   change_pixels_lsb(x, y, data, size_bits, bits);
 }
 
-const char *get_msg(unsigned int x, unsigned int y, Pixel **data)
+void get_msg(unsigned int x, unsigned int y, Pixel **data)
 {
-  char *msg = calloc(1000, 1000 * sizeof *msg); // Realloc
+  char c = 0;
   unsigned int bits_index = 0;
 
   for (unsigned int i = 0; i < y; i++) {
@@ -62,18 +63,20 @@ const char *get_msg(unsigned int x, unsigned int y, Pixel **data)
 
       for (unsigned short int k = 0; k < sizeof (Pixel); k++, bits_index++) {
         unsigned char bit_position = bits_index % 8;
-        unsigned int msg_index = bits_index / 8;
         bool lsb_bit = pixels[k] & 1; // Bit index, 8 by 8
 
-        msg[msg_index] |= lsb_bit << (7 - bit_position);
+        c |= lsb_bit << (7 - bit_position);
 
-        // If this is the end of the message, then break out of nested for loops
-        if (bit_position == 7 && msg[msg_index] == '\0') {
-          return msg;
+        if (bit_position == 7) {
+          putchar(c);
+          // If it's the end of the message, then break out of nested for loops
+          if (c == '\0') {
+            putchar('\n');
+            return;
+          }
+          c = 0;
         }
       }
     }
   }
-
-  return msg;
 }

@@ -13,4 +13,4 @@ void change_pixels_lsb(unsigned int x, unsigned int y, Pixel **data, unsigned
 
 void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg);
 
-const char *get_msg(unsigned int x, unsigned int y, Pixel **data);
+void get_msg(unsigned int x, unsigned int y, Pixel **data);
