@@ -5,7 +5,7 @@
 //#include <unistd.h>
 //#include <ctype.h>
 #include "img/ppm.h"
-//#include "img/bpm.c"
+#include "img/bmp.h"
 
 const char *get_msg_content(const char *filename)
 {
@@ -95,21 +95,27 @@ int main(int argc, char **argv)
   const char *img_file = argv[optind];
 
   if (strncmp(fmt, "ppm", 3) == 0) {
+    PPM *img = read_ppm(img_file);
     if (mode == ENCODER) {
-      PPM *img = read_ppm(img_file);
+    // Encoder
       const char *msg = get_msg_content(in);
       hide_msg(img->x, img->y, img->data, msg);
       write_ppm(img, img_file);
-    } else if (mode == DECODER) {
-      PPM *img = read_ppm(img_file);
+    } else {
+    // Decoder
       get_msg(img->x, img->y, img->data, out);
     }
   } else if (strncmp(fmt, "bmp", 3) == 0) {
-    //if (mode == ENCODER) {
-    //  BMP *img = read_bmp(img_file);
-    //  write_bmp(img, img_file);
-    //} else if (mode == DECODER) {
-    //}
+    BMP *img = read_bmp(img_file);
+    if (mode == ENCODER) {
+      // Encoder
+      const char *msg = get_msg_content(in);
+      hide_msg(img->header_info->x, img->header_info->y, img->data, msg);
+      write_bmp(img, img_file);
+    } else {
+      // Decoder
+      get_msg(img->header_info->x, img->header_info->y, img->data, out);
+    }
   } else {
     fprintf(stderr, "Invalid format.\n");
     return EXIT_FAILURE;
