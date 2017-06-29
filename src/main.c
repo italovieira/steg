@@ -103,7 +103,7 @@ int main(int argc, char **argv)
       write_ppm(img, img_file);
     } else {
     // Decoder
-      get_msg(img->x, img->y, img->data, out);
+      save_msg(img->x, img->y, img->data, out);
     }
   } else if (strncmp(fmt, "bmp", 3) == 0) {
     BMP *img = read_bmp(img_file);
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
       write_bmp(img, img_file);
     } else {
       // Decoder
-      get_msg(img->header_info->x, img->header_info->y, img->data, out);
+      save_msg(img->header_info->x, img->header_info->y, img->data, out);
     }
   } else {
     fprintf(stderr, "Invalid format.\n");

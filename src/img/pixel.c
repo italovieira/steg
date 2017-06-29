@@ -51,7 +51,7 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
   change_pixels_lsb(x, y, data, size_bits, bits);
 }
 
-void get_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename)
+void save_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename)
 {
   FILE *fp = fopen(filename, "w");
 
