@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "ppm.h"
 
 PPM* read_ppm(const char *filename)
@@ -9,7 +10,7 @@ PPM* read_ppm(const char *filename)
   PPM *img = NULL;
 
   if (fp == NULL) {
-    perror("steg: cannot open 'FILE'");
+    fprintf(stderr, "cannot access '%s': %s\n", filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
@@ -47,7 +48,7 @@ void write_ppm(PPM *img, const char *filename)
 {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
-    perror("steg: cannot open 'FILE'");
+    fprintf(stderr, "cannot access '%s': %s\n", filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
