@@ -1,3 +1,6 @@
+#ifndef BMP_H
+#define BMP_H
+
 #include "pixel.h"
 
 typedef struct {
@@ -28,3 +31,5 @@ typedef struct {
 BMP* read_bmp(const char *filename);
 
 void write_bmp(BMP *img, const char *filename);
+
+#endif

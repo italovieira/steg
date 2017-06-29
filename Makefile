@@ -1,7 +1,7 @@
 C=gcc
 CFLAGS=-W -Wall -pedantic -ansi -std=c99
 SRC=main.c
-OBJS=ppm.o pixel.o
+OBJS=pixel.o ppm.o bmp.o
 
 all: main
 main: src/main.c $(OBJS)
