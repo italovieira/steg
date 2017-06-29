@@ -19,11 +19,9 @@ PPM* read_ppm(const char *filename)
   // Get format type. E.x.: P6
   char type[3];
   fgets(type, sizeof type, fp);
-  printf("%s\n", type);
 
   // Get the width, height and the max value of a pixel
   fscanf(fp, "%u %u %hu ", &img->x, &img->y, &img->max);
-  printf("%u %u\n%hu\n", img->x, img->y, img->max);
 
   // Allocate img data
   img->data = malloc(img->y * sizeof (Pixel *));
