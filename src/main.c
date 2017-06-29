@@ -6,6 +6,9 @@
 #include "img/ppm.h"
 #include "img/bmp.h"
 
+// Retorna mensagem a ser escondida do arquivo 'filename'.  Também checa se a
+// quantidade de pixels é suficiente para gravar toda a mensagem, ao passar a
+// informação da área dos pixels que é largura x altura (x * y).
 const char *get_msg_content(const char *filename, unsigned long pixels_size)
 {
   FILE *fp = fopen(filename, "r");
@@ -37,6 +40,8 @@ const char *get_msg_content(const char *filename, unsigned long pixels_size)
   return msg;
 }
 
+// Função principal que lida com os argumentos do comando e chama as respectivas
+// instruções a ser realizadas pelo programa.
 int main(int argc, char **argv)
 {
   enum {
