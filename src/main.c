@@ -2,26 +2,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-//#include <unistd.h>
-//#include <ctype.h>
+#include <errno.h>
 #include "img/ppm.h"
 #include "img/bmp.h"
 
-const char *get_msg_content(const char *filename)
+const char *get_msg_content(const char *filename, unsigned long pixels_size)
 {
   FILE *fp = fopen(filename, "r");
 
   if (fp == NULL) {
-    perror("steg: cannot open 'FILE'");
+    fprintf(stderr, "steg: cannot access '%s': %s\n", filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
   fseek(fp, 0, SEEK_END);
-  unsigned int img_size = ftell(fp);
+  unsigned long img_size = ftell(fp);
+  if (pixels_size * 3 < img_size * 8) {
+    fprintf(stderr, "steg: insufficient pixels to store secret message.\n");
+    exit(EXIT_FAILURE);
+  }
   rewind(fp);
-  char *msg = malloc(img_size * sizeof *msg);
 
-  fread(msg, 1, img_size, fp);
+  char *msg = malloc(img_size * sizeof *msg);
+  if (msg == NULL) {
+    perror("steg");
+    exit(EXIT_FAILURE);
+  }
+
+  if (fread(msg, 1, img_size, fp) != img_size) {
+    fprintf(stderr, "steg: error occured while reading file.\n");
+    exit(EXIT_FAILURE);
+  }
 
   return msg;
 }
@@ -63,7 +74,7 @@ int main(int argc, char **argv)
   }
 
   if (argc == 1) {
-    fprintf(stderr, "steg: expected arguments.\nTry 'steg -h' for more information.\n");
+    fprintf(stderr, "steg: expected arguments.\n");
     return EXIT_FAILURE;
   }
 
@@ -88,7 +99,7 @@ int main(int argc, char **argv)
   }
 
   if (optind >= argc) {
-    fprintf(stderr, "steg: expected image file.\nTry 'steg -h' for more information.\n");
+    fprintf(stderr, "steg: expected image file.\n");
     return EXIT_FAILURE;
   }
 
@@ -98,7 +109,7 @@ int main(int argc, char **argv)
     PPM *img = read_ppm(img_file);
     if (mode == ENCODER) {
     // Encoder
-      const char *msg = get_msg_content(in);
+      const char *msg = get_msg_content(in, img->x * img->y);
       hide_msg(img->x, img->y, img->data, msg);
       write_ppm(img, img_file);
     } else {
@@ -109,7 +120,7 @@ int main(int argc, char **argv)
     BMP *img = read_bmp(img_file);
     if (mode == ENCODER) {
       // Encoder
-      const char *msg = get_msg_content(in);
+      const char *msg = get_msg_content(in, img->header_info->x * img->header_info->y);
       hide_msg(img->header_info->x, img->header_info->y, img->data, msg);
       write_bmp(img, img_file);
     } else {

@@ -1,11 +1,16 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
+#include <errno.h>
 #include "pixel.h"
 
 bool* get_msg_bits(const char *msg, unsigned int msg_len)
 {
   bool *bits = malloc(8 * (msg_len + 1) * sizeof *bits);
+  if (bits == NULL) {
+    perror("steg");
+    exit(EXIT_FAILURE);
+  }
   unsigned int bits_index = 0;
 
   // Get bits sequence of msg and set to array bits
@@ -54,12 +59,10 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
 void save_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename)
 {
   FILE *fp = fopen(filename, "w");
-
   if (fp == NULL) {
-    perror("steg: cannot open 'FILE'");
+    fprintf(stderr, "steg: cannot access '%s': %s\n", filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
-
 
   char c = 0;
   unsigned int bits_index = 0;
