@@ -21,7 +21,7 @@ PPM* read_ppm(const char *filename)
   printf("%s\n", type);
 
   // Get the width, height and the max value of a pixel
-  fscanf(fp, "%u %u %hu", &img->x, &img->y, &img->max);
+  fscanf(fp, "%u %u %hu ", &img->x, &img->y, &img->max);
   printf("%u %u\n%hu\n", img->x, img->y, img->max);
 
   // Allocate img data
@@ -51,7 +51,7 @@ void write_ppm(PPM *img, const char *filename)
     exit(EXIT_FAILURE);
   }
 
-  fprintf(fp, "P6\n%u %u\n%hu", img->x, img->y, img->max);
+  fprintf(fp, "P6\n%u %u\n%hu\n", img->x, img->y, img->max);
 
   // Write the pixels
   for (unsigned int i = 0; i < img->y; i++) {
