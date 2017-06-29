@@ -51,8 +51,16 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
   change_pixels_lsb(x, y, data, size_bits, bits);
 }
 
-void get_msg(unsigned int x, unsigned int y, Pixel **data)
+void get_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename)
 {
+  FILE *fp = fopen(filename, "w");
+
+  if (fp == NULL) {
+    perror("steg: cannot open 'FILE'");
+    exit(EXIT_FAILURE);
+  }
+
+
   char c = 0;
   unsigned int bits_index = 0;
 
@@ -68,12 +76,11 @@ void get_msg(unsigned int x, unsigned int y, Pixel **data)
         c |= lsb_bit << (7 - bit_position);
 
         if (bit_position == 7) {
-          putchar(c);
           // If it's the end of the message, then break out of nested for loops
           if (c == '\0') {
-            putchar('\n');
             return;
           }
+          fputc(c, fp);
           c = 0;
         }
       }
