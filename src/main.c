@@ -133,7 +133,7 @@ int main(int argc, char **argv)
       save_msg(img->header_info->x, img->header_info->y, img->data, out);
     }
   } else {
-    fprintf(stderr, "Invalid format.\n");
+    fprintf(stderr, "steg: invalid format.\nTry 'ppm' or 'bmp'.\n");
     return EXIT_FAILURE;
   }
 
