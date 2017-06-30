@@ -6,6 +6,19 @@
 #include "img/ppm.h"
 #include "img/bmp.h"
 
+void help()
+{
+  printf("Usage:  steg OPTION... FILE\n\n");
+  printf("  -h    Display this usage information.\n"
+         "  -e    Run in encoder mode.\n"
+         "  -d    Run in decoder mode.\n"
+         "  -f    Image format to encode or decode. Accepts 'ppm' or 'bmp'.\n"
+         "  -i    Input file containing the secret message. Expects '-e' option.\n"
+         "  -o    Output file to store the decoded message. Expects '-d' option.\n");
+  printf("\nFILE refers to image file to encode or decode and will be overwritten.\n");
+  exit(EXIT_SUCCESS);
+}
+
 // Retorna mensagem a ser escondida do arquivo 'filename'.  Também checa se a
 // quantidade de pixels é suficiente para gravar toda a mensagem, ao passar a
 // informação da área dos pixels que é largura x altura (x * y).
@@ -56,7 +69,7 @@ int main(int argc, char **argv)
   while ((c = getopt(argc, argv, "edf:i:o:h")) != -1) {
     switch (c) {
       case 'h': // Help
-        // Print help
+        help();
         break;
       case 'e': // Help
         mode = ENCODER;
@@ -79,8 +92,7 @@ int main(int argc, char **argv)
   }
 
   if (argc == 1) {
-    fprintf(stderr, "steg: expected arguments.\n");
-    return EXIT_FAILURE;
+    help();
   }
 
   if (mode == NONE) {
