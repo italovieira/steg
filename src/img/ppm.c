@@ -8,7 +8,8 @@ PPM* read_ppm(const char *filename)
 {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
-    fprintf(stderr, "steg: cannot access '%s': %s\n", filename, strerror(errno));
+    fprintf(stderr, "steg: cannot access '%s': %s\n",
+            filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 

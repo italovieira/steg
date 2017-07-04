@@ -29,7 +29,8 @@ void change_bit_lsb(unsigned char *byte, bool bit)
   *byte = bit ? *byte | 0x01 : *byte & 0xFE;
 }
 
-void change_pixels_lsb(unsigned int x, unsigned int y, Pixel **data, unsigned int size_bits, bool bits[])
+void change_pixels_lsb(unsigned int x, unsigned int y, Pixel **data,
+                       unsigned int size_bits, bool bits[])
 {
   unsigned int bits_index = 0;
 
@@ -56,11 +57,13 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
   change_pixels_lsb(x, y, data, size_bits, bits);
 }
 
-void save_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename)
+void save_msg(unsigned int x, unsigned int y,
+              Pixel **data, const char *filename)
 {
   FILE *fp = fopen(filename, "w");
   if (fp == NULL) {
-    fprintf(stderr, "steg: cannot access '%s': %s\n", filename, strerror(errno));
+    fprintf(stderr, "steg: cannot access '%s': %s\n",
+            filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
