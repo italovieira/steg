@@ -1,4 +1,4 @@
-#include "../src/img/pixel.h"
+#include "../src/pixel.h"
 
 // For test
 void print_bits(unsigned int size, bool *bits)

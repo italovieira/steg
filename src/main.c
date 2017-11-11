@@ -3,8 +3,8 @@
 #include <string.h>
 #include <getopt.h>
 #include <errno.h>
-#include "img/ppm.h"
-#include "img/bmp.h"
+#include "ppm.h"
+#include "bmp.h"
 
 void help()
 {

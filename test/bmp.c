@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../src/img/bmp.h"
+#include "../src/bmp.h"
 
 void print_rgb_bmp(BMP *img)
 {

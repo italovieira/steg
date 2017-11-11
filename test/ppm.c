@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../src/img/ppm.h"
+#include "../src/ppm.h"
 
 void print_rgb_ppm(PPM *img)
 {
