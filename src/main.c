@@ -68,10 +68,10 @@ int main(int argc, char **argv)
     DECODER
   } mode = NONE;
 
-  char *fmt = NULL, *in = NULL, *out = NULL;
+  char *in = NULL, *out = NULL;
   int c;
 
-  while ((c = getopt(argc, argv, "edf:i:o:h")) != -1) {
+  while ((c = getopt(argc, argv, "edi:o:h")) != -1) {
     switch (c) {
       case 'h': // Help
         help();
@@ -81,9 +81,6 @@ int main(int argc, char **argv)
         break;
       case 'd':
         mode = DECODER;
-        break;
-      case 'f': // Format
-        fmt = optarg;
         break;
       case 'i': // Input file
         in = optarg;
@@ -115,11 +112,6 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (fmt == NULL) {
-    fprintf(stderr, "steg: missing '-f' operand.\n");
-    return EXIT_FAILURE;
-  }
-
   if (optind >= argc) {
     fprintf(stderr, "steg: expected image file.\n");
     return EXIT_FAILURE;
@@ -127,31 +119,15 @@ int main(int argc, char **argv)
 
   const char *img_file = argv[optind];
 
-  if (strncmp(fmt, "ppm", 3) == 0) {
-    PPM *img = read_ppm(img_file);
-    if (mode == ENCODER) {
+  BMP *img = read_bmp(img_file);
+  if (mode == ENCODER) {
     // Encoder
-      const char *msg = get_msg_content(in, img->x * img->y);
-      hide_msg(img->x, img->y, img->data, msg);
-      write_ppm(img, img_file);
-    } else {
-    // Decoder
-      save_msg(img->x, img->y, img->data, out);
-    }
-  } else if (strncmp(fmt, "bmp", 3) == 0) {
-    BMP *img = read_bmp(img_file);
-    if (mode == ENCODER) {
-      // Encoder
-      const char *msg = get_msg_content(in, img->header_info->x * img->header_info->y);
-      hide_msg(img->header_info->x, img->header_info->y, img->data, msg);
-      write_bmp(img, img_file);
-    } else {
-      // Decoder
-      save_msg(img->header_info->x, img->header_info->y, img->data, out);
-    }
+    const char *msg = get_msg_content(in, img->header_info->x * img->header_info->y);
+    hide_msg(img->header_info->x, img->header_info->y, img->data, msg);
+    write_bmp(img, img_file);
   } else {
-    fprintf(stderr, "steg: invalid format.\nTry 'ppm' or 'bmp'.\n");
-    return EXIT_FAILURE;
+    // Decoder
+    save_msg(img->header_info->x, img->header_info->y, img->data, out);
   }
 
   return EXIT_SUCCESS;
