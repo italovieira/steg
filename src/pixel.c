@@ -58,15 +58,8 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg)
 }
 
 void save_msg(unsigned int x, unsigned int y,
-              Pixel **data, const char *filename)
+              Pixel **data)
 {
-  FILE *fp = fopen(filename, "w");
-  if (fp == NULL) {
-    fprintf(stderr, "steg: cannot access '%s': %s\n",
-            filename, strerror(errno));
-    exit(EXIT_FAILURE);
-  }
-
   char c = 0;
   unsigned int bits_index = 0;
 
@@ -86,7 +79,7 @@ void save_msg(unsigned int x, unsigned int y,
           if (c == 0x03) {
             return;
           }
-          fputc(c, fp);
+          fputc(c, stdout);
           c = 0;
         }
       }

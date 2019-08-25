@@ -28,6 +28,6 @@ void hide_msg(unsigned int x, unsigned int y, Pixel **data, const char *msg);
 
 // Essa função obtém a mensagem secreta escondida em no array de pixels 'data' e
 // a grava no arquivo 'filename'.
-void save_msg(unsigned int x, unsigned int y, Pixel **data, const char *filename);
+void save_msg(unsigned int x, unsigned int y, Pixel **data);
 
 #endif

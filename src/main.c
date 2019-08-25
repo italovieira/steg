@@ -10,24 +10,19 @@ void help()
 {
   printf("Usage:  steg OPTION... FILE\n\n");
   printf("  -h    Display this usage information.\n"
-         "  -e    Run in encoder mode.\n"
-         "  -d    Run in decoder mode.\n"
-         "  -f    Image format to encode or decode. Accepts 'ppm' or 'bmp'.\n"
-         "  -i    Input file containing the secret message. Expects '-e' option.\n"
-         "  -o    Output file to store the decoded message. Expects '-d' option.\n");
-  printf("\nFILE refers to image file to encode or decode and will be overwritten.\n");
+         "  -e    Run in encoder mode. Expects message from standard input.\n"
+         "  -d    Run in decoder mode. Write message in standard output.\n");
+  printf("\nFILE refers to image file (BMP) to encode or decode and will be overwritten.\n");
   exit(EXIT_SUCCESS);
 }
 
-// Retorna mensagem a ser escondida do arquivo 'filename'.  Também checa se a
+// Retorna mensagem a ser escondida do arquivo 'fp'.  Também checa se a
 // quantidade de pixels é suficiente para gravar toda a mensagem, ao passar a
 // informação da área dos pixels que é largura x altura (x * y).
-const char *get_msg_content(const char *filename, unsigned long pixels_size)
+const char *get_msg_content(FILE *fp, unsigned long pixels_size)
 {
-  FILE *fp = fopen(filename, "r");
-
   if (fp == NULL) {
-    fprintf(stderr, "steg: cannot access '%s': %s\n", filename, strerror(errno));
+    fprintf(stderr, "steg: cannot access the file containing the message': %s\n", strerror(errno));
     exit(EXIT_FAILURE);
   }
 
@@ -46,14 +41,13 @@ const char *get_msg_content(const char *filename, unsigned long pixels_size)
   }
 
   if (fread(msg, 1, file_size, fp) != file_size) {
-    fprintf(stderr, "steg: error occured while reading file.\n");
+    fprintf(stderr, "steg 1: error occured while reading the message from input.\n");
     exit(EXIT_FAILURE);
   }
 
-  char *eot = malloc(1 * sizeof *eot);
+  char eot[2];
   eot[0] = 0x03;
   strncat(msg, eot, 1);
-  free(eot);
 
   return msg;
 }
@@ -68,10 +62,9 @@ int main(int argc, char **argv)
     DECODER
   } mode = NONE;
 
-  char *in = NULL, *out = NULL;
   int c;
 
-  while ((c = getopt(argc, argv, "edi:o:h")) != -1) {
+  while ((c = getopt(argc, argv, "edh")) != -1) {
     switch (c) {
       case 'h': // Help
         help();
@@ -81,12 +74,6 @@ int main(int argc, char **argv)
         break;
       case 'd':
         mode = DECODER;
-        break;
-      case 'i': // Input file
-        in = optarg;
-        break;
-      case 'o': // Output file
-        out = optarg;
         break;
       default:
         return EXIT_FAILURE;
@@ -102,16 +89,6 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (mode == ENCODER && in == NULL) {
-    fprintf(stderr, "steg: missing '-i' operand.\n");
-    return EXIT_FAILURE;
-  }
-
-  if (mode == DECODER && out == NULL) {
-    fprintf(stderr, "steg: missing '-o' operand.\n");
-    return EXIT_FAILURE;
-  }
-
   if (optind >= argc) {
     fprintf(stderr, "steg: expected image file.\n");
     return EXIT_FAILURE;
@@ -122,12 +99,12 @@ int main(int argc, char **argv)
   BMP *img = read_bmp(img_file);
   if (mode == ENCODER) {
     // Encoder
-    const char *msg = get_msg_content(in, img->header_info->x * img->header_info->y);
+    const char *msg = get_msg_content(stdin, img->header_info->x * img->header_info->y);
     hide_msg(img->header_info->x, img->header_info->y, img->data, msg);
     write_bmp(img, img_file);
   } else {
     // Decoder
-    save_msg(img->header_info->x, img->header_info->y, img->data, out);
+    save_msg(img->header_info->x, img->header_info->y, img->data);
   }
 
   return EXIT_SUCCESS;
