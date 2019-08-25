@@ -83,7 +83,7 @@ void save_msg(unsigned int x, unsigned int y,
 
         if (bit_position == 7) {
           // If it's the end of the message, then break out of nested for loops
-          if (c == '\0') {
+          if (c == 0x03) {
             return;
           }
           fputc(c, fp);

@@ -32,23 +32,28 @@ const char *get_msg_content(const char *filename, unsigned long pixels_size)
   }
 
   fseek(fp, 0, SEEK_END);
-  unsigned long img_size = ftell(fp);
-  if (pixels_size * 3 < img_size * 8) {
+  unsigned long file_size = ftell(fp);
+  if (pixels_size * 3 < (file_size + 1) * 8) {
     fprintf(stderr, "steg: insufficient pixels to store secret message.\n");
     exit(EXIT_FAILURE);
   }
   rewind(fp);
 
-  char *msg = malloc(img_size * sizeof *msg);
+  char *msg = malloc((file_size + 1) * sizeof *msg);
   if (msg == NULL) {
     perror("steg");
     exit(EXIT_FAILURE);
   }
 
-  if (fread(msg, 1, img_size, fp) != img_size) {
+  if (fread(msg, 1, file_size, fp) != file_size) {
     fprintf(stderr, "steg: error occured while reading file.\n");
     exit(EXIT_FAILURE);
   }
+
+  char *eot = malloc(1 * sizeof *eot);
+  eot[0] = 0x03;
+  strncat(msg, eot, 1);
+  free(eot);
 
   return msg;
 }
