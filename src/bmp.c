@@ -70,7 +70,7 @@ BMP* read_bmp(const char *filename)
     exit(EXIT_FAILURE);
   }
   for (unsigned int i = 0; i < header_info->y; i++) {
-    data[i] = malloc(header_info->x * sizeof **data);
+    data[i] = malloc(header_info->x * sizeof *data[i]);
     if (data[i] == NULL) {
       perror("steg");
       exit(EXIT_FAILURE);
@@ -79,10 +79,7 @@ BMP* read_bmp(const char *filename)
 
   // Get the pixels
   for (unsigned int i = 0; i < header_info->y; i++) {
-    if (fread(data[i], 1, header_info->x, fp) != header_info->x) {
-      fprintf(stderr, "steg: error occured while reading file.\n");
-      exit(EXIT_FAILURE);
-    }
+    fread(data[i], sizeof *data[i], header_info->x, fp);
   }
 
   fclose(fp);
