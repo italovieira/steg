@@ -79,7 +79,7 @@ BMP* read_bmp(const char *filename)
 
   // Get the pixels
   for (unsigned int i = 0; i < header_info->y; i++) {
-    if (fread(data[i], sizeof **data, header_info->x, fp) != header_info->x) {
+    if (fread(data[i], 1, header_info->x, fp) != header_info->x) {
       fprintf(stderr, "steg: error occured while reading file.\n");
       exit(EXIT_FAILURE);
     }
